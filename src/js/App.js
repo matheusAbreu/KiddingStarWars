@@ -3,7 +3,10 @@ import Home from './pages/Home';
 import '../css/App.css';
 
 const App = () =>(
-    <Home />
+    <div className='App'>
+      <Home />
+    </div>
+    
   );
 
 export default App;
