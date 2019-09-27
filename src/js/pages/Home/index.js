@@ -8,6 +8,7 @@ class Profile extends React.Component{
     {
         super(props);
         this.state = {
+            films: undefined,
             totalPlanetas: 0,
             error:'',
             totalAutualizado:false,
@@ -51,8 +52,28 @@ class Profile extends React.Component{
     }
     MudarPlaneta = () =>
     {
-        this.setState({...this.state, planeta: undefined});
+        this.setState({...this.state, planeta: undefined, films:[]});
         this.BuscandoPlaneta();
+    }
+    BuscandoFilms()
+    {
+        const requestInfo = {
+            method: 'GET',
+            body: JSON.stringify()
+        };
+        fetch(REACT_APP_API_SW + '/films/', requestInfo)
+        .then(response => response.json())
+        .then(response => {
+            if(response.title !== '')
+            {
+                this.setState({...this.state, films: response});
+                return true;
+            }
+        throw new Error("Houve um erro ao carregar o filme...");
+        })
+        .catch(e => {
+            this.setState({...this.state, error: e.message});
+         }); 
     }
     async BuscandoPlaneta() {
         if(!this.state.totalAutualizado)
@@ -66,11 +87,14 @@ class Profile extends React.Component{
         fetch(REACT_APP_API_SW + '/planets/' + planetaRamdom.toString()+ '/', requestInfo)
         .then(response => response.json())
         .then(response => {
+            if(response.name !== '')
+            {
                 this.setState({
                     ...this.state,
                     planeta: response,
                 });
                 return true;
+            }
 
         throw new Error("Houve um erro ao carregar o planeta...");
         })
@@ -80,7 +104,11 @@ class Profile extends React.Component{
     }   
     render(){
         if(!this.state.totalAutualizado)
-           this.BuscandoPlaneta();
+        {   
+            this.BuscandoFilms();
+            this.BuscandoPlaneta();
+        }
+           
           
         return(
             <div>
@@ -88,7 +116,7 @@ class Profile extends React.Component{
                     <br/>
                     {(this.state.planeta !== undefined )?(
                         <div>
-                            <LittleCard planeta={this.state.planeta} />
+                            <LittleCard planeta={this.state.planeta} filmes={this.state.filmesPlaneta} />
                             <Button variant='warning' onClick={this.MudarPlaneta} >Next</Button>
                         </div>
                     ):(
@@ -102,14 +130,3 @@ class Profile extends React.Component{
     }
 }
 export default Profile;
-
-/*
-    {(this.state.listaAtualizada === false)?(
-                        this.state.planetasCarregados.map((projeto, index) =>{
-                        return <LittleCard key={index} title={projeto.name} text={projeto.diameter} />
-                    })):(
-                        <div className='col-12' style={{alignItems: 'center', display:'flex', justifyContent:'center'}} >
-                            <Spinner variant='success' as="span" animation="border" role="status" aria-hidden="true" />
-                        </div>
-                    )}
-*/
