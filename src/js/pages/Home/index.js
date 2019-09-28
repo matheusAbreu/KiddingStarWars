@@ -22,9 +22,24 @@ class Profile extends React.Component{
         randomNumber = Math.trunc(Math.random()*100);
 
         if(randomNumber > this.state.totalPlanetas )
-            randomNumber -= this.state.totalPlanetas;
-
+        {
+            return this.GerandoNumeroAleatorio();
+        }else if(randomNumber < 1)
+        {
+            randomNumber = 1;
+        }
         return randomNumber;
+    }
+    InformandoNomeFilme = (url) =>
+    {
+        if(this.state.planeta.films.length !== undefined)
+        {
+            for(let i = 0;i < this.state.planeta.films.length;i++)
+                if(this.state.films[i].url === url)
+                   return this.state.films[i].name;
+
+            return "nome não encontrado";
+        }
     }
     BuscandoTotalPlanetas = () =>
     {
@@ -79,7 +94,7 @@ class Profile extends React.Component{
         if(!this.state.totalAutualizado)
            await this.BuscandoTotalPlanetas()
 
-        let planetaRamdom = this.GerandoNumeroAleatorio();
+        let planetaRamdom = await this.GerandoNumeroAleatorio();
         const requestInfo = {
             method: 'GET',
             body: JSON.stringify()
@@ -111,20 +126,21 @@ class Profile extends React.Component{
            
           
         return(
-            <div>
-                 <div className='row'>
-                    <br/>
-                    {(this.state.planeta !== undefined )?(
-                        <div>
-                            <LittleCard planeta={this.state.planeta} filmes={this.state.filmesPlaneta} />
-                            <Button variant='warning' onClick={this.MudarPlaneta} >Next</Button>
-                        </div>
-                    ):(
-                        <div className='col-12' style={{alignItems: 'center', display:'flex', justifyContent:'center'}} >
-                            <Spinner variant='success' as="span" animation="border" role="status" aria-hidden="true" />
-                        </div>
-                    )}
-                </div>
+            <div className='row'>
+                <br/>
+                {(this.state.planeta !== undefined )?(
+                    <div className='col-12'>
+                        <LittleCard planeta={this.state.planeta} filmes={this.state.planeta.films.map((movie, index)=>
+                            {
+                                return this.InformandoNomeFilme(movie);
+                            })} />
+                        <Button variant='warning' onClick={this.MudarPlaneta} >Next</Button>
+                    </div>
+                ):(
+                    <div className='col-12' >
+                        <Spinner variant='success' as="span" animation="border" role="status" aria-hidden="true" />
+                    </div>
+                )}
             </div>
         );
     }

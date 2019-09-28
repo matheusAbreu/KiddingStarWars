@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 const LittleCard = (props) =>{
     return(
         <>  
-            <div className="card text-black bg-warning container-flex" 
+            <div className=" card text-black bg-warning " 
             style={{width: '20rem', minHeight:'15rem', margin: '1rem 1rem 1rem 1rem' }}>
                 <div className="card-header" style={{height:'auto', width:'auto'}}>
                     {props.planeta.name}
