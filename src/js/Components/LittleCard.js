@@ -22,17 +22,4 @@ const LittleCard = (props) =>{
         </>
     );
 }
-  
 export default LittleCard;
-
-  /*
-  
-        <div className=" card text-black bg-warning" 
-            style={{width: '20rem', minHeight:'15rem', margin: '1rem 1rem 1rem 1rem', }}>
-            <div className="card-header" style={{height:'auto', width:'auto'}}>
-                {props.planeta.name}
-            </div>
-            <div className="card-body" style={{height:'100%'}}>
-              
-            </div>
-        </div>*/
