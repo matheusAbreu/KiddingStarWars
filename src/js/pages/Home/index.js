@@ -1,6 +1,6 @@
 import React from "react";
 import LittleCard from '../../Components/LittleCard';
-import {Spinner, Button, Col, Row} from 'react-bootstrap' ;
+import {Spinner, Col, Row} from 'react-bootstrap' ;
 const REACT_APP_API_SW = process.env.REACT_APP_API_SW;
 
 class Profile extends React.Component{
@@ -35,17 +35,13 @@ class Profile extends React.Component{
     }
     InformandoNomeFilme = (url) =>
     {
-        /*
-       this.setState({
-           ...this.state, 
-           tituloDosFilmesPlaneta:[]
-        }); */
         if(this.state.films !== undefined)
-           for(var i = 0;i < this.state.films.results.length;i++)
-                    if(this.state.films.results[i].url === url)
-                        return this.state.films.results[i].title;
+        {
+            for(var i = 0;i < this.state.films.results.length;i++)
+                if(this.state.films.results[i].url === url)
+                    return this.state.films.results[i].title;
 
-
+        }
         return '';
     }
     BuscandoTotalPlanetas = () =>
@@ -132,26 +128,26 @@ class Profile extends React.Component{
     }   
     render(){
         if(!this.state.totalAutualizado)
-        {
            this.BuscandoPlaneta();
-           
-        }
 
         return(
             <Row>
-                <br/>
+            <Col md={4} />
               <Col >
                 {(this.state.planeta !== undefined )?(
-                        <div className='col-12'>
-                            <LittleCard planeta={this.state.planeta} filmes={this.state.planeta.films.map((movie)=> this.InformandoNomeFilme(movie))} />
-                            <Button variant='warning' onClick={this.MudarPlaneta}>Next</Button>
+                        <div style={{width:'auto'}}>
+                            <>
+                                <LittleCard planeta={this.state.planeta} onClick={this.MudarPlaneta}
+                                 filmes={this.state.planeta.films.map((movie)=> this.InformandoNomeFilme(movie))} />
+                            </>
                         </div>
                     ):(
-                        <div className='col-12' >
+                        <div >
                             <Spinner variant='warning' as="span" animation="border" role="status" aria-hidden="true" />
                         </div>
                     )}
               </Col>
+              <Col md={4} />
             </Row>
         );
     }
