@@ -1,6 +1,6 @@
 import React from "react";
 import LittleCard from '../../Components/LittleCard';
-import {Spinner, Button} from 'react-bootstrap' ;
+import {Spinner, Button, Col, Row} from 'react-bootstrap' ;
 const REACT_APP_API_SW = process.env.REACT_APP_API_SW;
 
 class Profile extends React.Component{
@@ -15,6 +15,8 @@ class Profile extends React.Component{
             totalAutualizado:false,
             planeta: undefined
         }
+        this.MudarPlaneta = this.MudarPlaneta.bind(this);
+        this.BuscandoPlaneta = this.BuscandoPlaneta.bind(this);
     }
     GerandoNumeroAleatorio = () =>
     {
@@ -33,15 +35,18 @@ class Profile extends React.Component{
     }
     InformandoNomeFilme = (url) =>
     {
-        this.setState({...this.state, tituloDosFilmesPlaneta:[]});
-        if(this.state.planeta !== undefined)
-            if(this.state.planeta.films.length > 0 && this.state.films.results.length > 0)
-            {
-                for(let i = 0;i < this.state.films.results.length;i++)
+        /*
+       this.setState({
+           ...this.state, 
+           tituloDosFilmesPlaneta:[]
+        }); */
+        if(this.state.films !== undefined)
+           for(var i = 0;i < this.state.films.results.length;i++)
                     if(this.state.films.results[i].url === url)
-                    this.state.tituloDosFilmesPlaneta.push(this.state.films.results[i].title);
+                        return this.state.films.results[i].title;
 
-            }
+
+        return '';
     }
     BuscandoTotalPlanetas = () =>
     {
@@ -67,10 +72,12 @@ class Profile extends React.Component{
             this.setState({...this.state, error: e.message});
          }); 
     }
-    MudarPlaneta = () =>
+    async MudarPlaneta()
     {
-        this.setState({...this.state, planeta: undefined});
-        this.BuscandoPlaneta();
+        this.setState({...this.state,
+            planeta: undefined,
+        });
+        await this.BuscandoPlaneta();        
     }
     BuscandoFilms()
     {
@@ -94,8 +101,12 @@ class Profile extends React.Component{
     }
     async BuscandoPlaneta() {
         if(!this.state.totalAutualizado)
-           await this.BuscandoTotalPlanetas()
-
+        {
+            await this.BuscandoTotalPlanetas();
+            await this.BuscandoFilms();
+            this.setState({...this.state, totalAutualizado:true});
+        }
+          
         let planetaRamdom = await this.GerandoNumeroAleatorio();
         const requestInfo = {
             method: 'GET',
@@ -110,11 +121,6 @@ class Profile extends React.Component{
                     ...this.state,
                     planeta: response,
                 });
-
-                if(this.state.planeta.films.length > 0)
-                    for(var i = 0; i < this.state.planeta.films.length; i++)
-                        this.InformandoNomeFilme(this.state.planeta.films[i]);
-
                 return true;
             }
 
@@ -126,26 +132,27 @@ class Profile extends React.Component{
     }   
     render(){
         if(!this.state.totalAutualizado)
-        {   
-            this.BuscandoFilms();
-            this.BuscandoPlaneta();
-        }
+        {
+           this.BuscandoPlaneta();
            
-          
+        }
+
         return(
-            <div className='row'>
+            <Row>
                 <br/>
+              <Col >
                 {(this.state.planeta !== undefined )?(
-                    <div className='col-12'>
-                        <LittleCard planeta={this.state.planeta} filmes={this.state.tituloDosFilmesPlaneta} />
-                        <Button variant='warning' onClick={this.MudarPlaneta} >Next</Button>
-                    </div>
-                ):(
-                    <div className='col-12' >
-                        <Spinner variant='success' as="span" animation="border" role="status" aria-hidden="true" />
-                    </div>
-                )}
-            </div>
+                        <div className='col-12'>
+                            <LittleCard planeta={this.state.planeta} filmes={this.state.planeta.films.map((movie)=> this.InformandoNomeFilme(movie))} />
+                            <Button variant='warning' onClick={this.MudarPlaneta}>Next</Button>
+                        </div>
+                    ):(
+                        <div className='col-12' >
+                            <Spinner variant='warning' as="span" animation="border" role="status" aria-hidden="true" />
+                        </div>
+                    )}
+              </Col>
+            </Row>
         );
     }
 }
