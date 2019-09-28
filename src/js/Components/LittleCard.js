@@ -5,7 +5,7 @@ import '../../css/App.css';
 const LittleCard = (props) =>{
     return(
         <>
-            <Card bg='warning' style={{width: '100%', minHeight:'15rem', margin: '1rem 1rem 1rem 1rem' }}>
+            <Card bg='warning' style={{width: '100%', minHeight:'15rem', margin: '1rem 0rem 1rem 0rem' }}>
                 <Card.Header style={{fontSize:'30px', fontStyle:'oblique'}} >{props.planeta.name}</Card.Header>
                 <Card.Body style={{fontSize:'18px'}} >
                         <p>Population: {props.planeta.population}</p>
