@@ -4,24 +4,22 @@ import '../../css/App.css';
 
 const LittleCard = (props) =>{
     return(
-        <Card bg='warning' style={{width: '100%', minHeight:'15rem', margin: '1rem 1rem 1rem 1rem' }}>
-            <Card.Header style={{fontSize:'30px', fontStyle:'oblique'}} >{props.planeta.name}</Card.Header>
-            <Card.Body style={{fontSize:'18px'}} >
-                    <p>Population: {props.planeta.population}</p>
-                    <p>Climate: {props.planeta.climate}</p>
-                    <p>Terrain: {props.planeta.terrain}</p>
-                    <p>Movies:  
-                        {props.filmes.map((film) => <><br/>{film}</> )}
-                    </p>
-            </Card.Body>
-            
-            <Card.Footer  >
-                <Button variant='outline-dark' onClick={props.onClick}>
-                    Next
-                </Button>
-            </Card.Footer>
-            
-        </Card>
+        <>
+            <Card bg='warning' style={{width: '100%', minHeight:'15rem', margin: '1rem 1rem 1rem 1rem' }}>
+                <Card.Header style={{fontSize:'30px', fontStyle:'oblique'}} >{props.planeta.name}</Card.Header>
+                <Card.Body style={{fontSize:'18px'}} >
+                        <p>Population: {props.planeta.population}</p>
+                        <p>Climate: {props.planeta.climate}</p>
+                        <p>Terrain: {props.planeta.terrain}</p>
+                        <p>Movies:  
+                            {props.filmes.map((film) => <><br/>{film}</> )}
+                        </p>
+                </Card.Body>
+            </Card>
+            <Button variant='outline-warning' onClick={props.onClick}>
+                Next
+            </Button>
+        </>
     );
 }
   
