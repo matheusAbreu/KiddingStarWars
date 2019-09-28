@@ -12,9 +12,10 @@ const LittleCard = (props) =>{
                     <p className="card-text" >Population: {props.planeta.population}</p>
                     <p className="card-text" >Climate: {props.planeta.climate}</p>
                     <p className="card-text" >Terrain: {props.planeta.terrain}</p>
+                    <p className="card-text" >Movies: 
                     {props.filmes.map((film, key)=>{
-                        return <p>{film}</p>
-                    })}
+                        return (film + ';');
+                    })}</p>
                 </div>
             </div>
         </>

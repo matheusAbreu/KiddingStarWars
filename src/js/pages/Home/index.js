@@ -10,6 +10,7 @@ class Profile extends React.Component{
         this.state = {
             films: undefined,
             totalPlanetas: 0,
+            tituloDosFilmesPlaneta: [],
             error:'',
             totalAutualizado:false,
             planeta: undefined
@@ -32,14 +33,15 @@ class Profile extends React.Component{
     }
     InformandoNomeFilme = (url) =>
     {
-        if(this.state.planeta.films.length !== undefined)
-        {
-            for(let i = 0;i < this.state.planeta.films.length;i++)
-                if(this.state.films[i].url === url)
-                   return this.state.films[i].name;
+        this.setState({...this.state, tituloDosFilmesPlaneta:[]});
+        if(this.state.planeta !== undefined)
+            if(this.state.planeta.films.length > 0 && this.state.films.results.length > 0)
+            {
+                for(let i = 0;i < this.state.films.results.length;i++)
+                    if(this.state.films.results[i].url === url)
+                    this.state.tituloDosFilmesPlaneta.push(this.state.films.results[i].title);
 
-            return "nome não encontrado";
-        }
+            }
     }
     BuscandoTotalPlanetas = () =>
     {
@@ -67,7 +69,7 @@ class Profile extends React.Component{
     }
     MudarPlaneta = () =>
     {
-        this.setState({...this.state, planeta: undefined, films:[]});
+        this.setState({...this.state, planeta: undefined});
         this.BuscandoPlaneta();
     }
     BuscandoFilms()
@@ -108,6 +110,11 @@ class Profile extends React.Component{
                     ...this.state,
                     planeta: response,
                 });
+
+                if(this.state.planeta.films.length > 0)
+                    for(var i = 0; i < this.state.planeta.films.length; i++)
+                        this.InformandoNomeFilme(this.state.planeta.films[i]);
+
                 return true;
             }
 
@@ -130,10 +137,7 @@ class Profile extends React.Component{
                 <br/>
                 {(this.state.planeta !== undefined )?(
                     <div className='col-12'>
-                        <LittleCard planeta={this.state.planeta} filmes={this.state.planeta.films.map((movie, index)=>
-                            {
-                                return this.InformandoNomeFilme(movie);
-                            })} />
+                        <LittleCard planeta={this.state.planeta} filmes={this.state.tituloDosFilmesPlaneta} />
                         <Button variant='warning' onClick={this.MudarPlaneta} >Next</Button>
                     </div>
                 ):(
